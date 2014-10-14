@@ -3,6 +3,7 @@ package com.logicalpractice.hibernate;
 import org.apache.log4j.BasicConfigurator;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
+import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.StatelessSession;
@@ -27,7 +28,6 @@ public class App
 
     public static void main(String[] args)
     {
-
         BasicConfigurator.configure();
         Logger.getRootLogger().setLevel(Level.INFO);
         Logger.getLogger("org.hibernate.tool.hbm2ddl").setLevel(Level.DEBUG);
@@ -36,9 +36,10 @@ public class App
         App a = new App();
         a.populateTestData();
 
-
         a.queryAndPrint("from MyEntity e order by e.state asc");
         a.queryAndPrint("from MyEntity e order by case when e.state = 'Maryland' then '0' else '1' end asc, e.state asc");
+
+        a.testCriteria();
     }
 
     private void queryAndPrint(String q)
@@ -47,6 +48,17 @@ public class App
 
         List results = s.createQuery(q).list();
         for (Object result : results)
+        {
+            MyEntity entity = (MyEntity) result;
+            System.out.println("MyEntity state=" + entity.getState() + " name=" + entity.getName());
+        }
+    }
+
+    void testCriteria() {
+        final Session s = sf.openSession();
+        final Criteria criteria = s.createCriteria(MyEntity.class);
+        final List<MyEntity> list = criteria.list();
+        for (Object result : list)
         {
             MyEntity entity = (MyEntity) result;
             System.out.println("MyEntity state=" + entity.getState() + " name=" + entity.getName());
