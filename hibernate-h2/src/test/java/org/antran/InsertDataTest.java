@@ -68,7 +68,7 @@ public class InsertDataTest
         criteria.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
         final List carts = criteria.list();
         assertNotNull(carts);
-        assertEquals(2, carts.size());
+        assertEquals(1, carts.size());
 
         session.close();
     }
