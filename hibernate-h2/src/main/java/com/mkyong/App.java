@@ -3,9 +3,11 @@ package com.mkyong;
 import com.mkyong.stock.Category;
 import com.mkyong.stock.Stock;
 import com.mkyong.util.HibernateUtil;
+import org.hibernate.Criteria;
 import org.hibernate.Session;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 public class App
@@ -33,7 +35,12 @@ public class App
         session.save(stock);
 
 
+
         session.getTransaction().commit();
+
+        final Criteria criteria = session.createCriteria(Stock.class);
+        final List list = criteria.list();
+        System.out.println("number of Stock: " + list.size());
 
         session.close();
         System.out.println("Done");
