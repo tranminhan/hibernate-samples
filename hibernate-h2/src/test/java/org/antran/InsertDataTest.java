@@ -65,6 +65,7 @@ public class InsertDataTest
         final Criteria accountCriteria = orderItem.createAlias("orderItem.account", "account");
         accountCriteria.add(Restrictions.eq("account.id", 1L));
 
+        criteria.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
         final List carts = criteria.list();
         assertNotNull(carts);
         assertEquals(2, carts.size());
