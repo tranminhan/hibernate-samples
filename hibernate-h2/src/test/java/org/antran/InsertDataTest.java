@@ -140,4 +140,34 @@ public class InsertDataTest
 
         session.close();
     }
+
+    private Criteria queryCartByAccountIdViaOrderItem2(Long accountId, Session session)
+    {
+        final Criteria criteria = session.createCriteria(Cart.class, "cart");
+        final Criteria cartItem = criteria.createAlias("cart.items", "item");
+        final Criteria orderItemCriteria = cartItem.createAlias("item.orderItem", "orderItem");
+        final Criteria accountCriteria = cartItem.createAlias("orderItem.account", "account");
+        accountCriteria.add(Restrictions.eq("account.id", accountId));
+
+        //criteria.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
+        return criteria;
+    }
+
+    @Test
+    public void shouldQueryCount()
+    {
+        createAccountCartOrder(7L);
+        createAccountCartOrder(8L);
+
+        final Session session = HibernateUtil.getSessionFactory().openSession();
+
+        final Long VALID_ACCOUNT_ID = 7L;
+        final Criteria validCriteria = queryCartByAccountIdViaOrderItem2(VALID_ACCOUNT_ID, session);
+        //validCriteria.setProjection(Projections.countDistinct("cart.id"));
+        validCriteria.setProjection(Projections.rowCount());
+        Long count = (Long) validCriteria.uniqueResult();
+        assertEquals((Long)1L, count);
+
+        session.close();
+    }
 }
