@@ -4,6 +4,7 @@ import com.mkyong.util.HibernateUtil;
 import org.apache.commons.lang.RandomStringUtils;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
+import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 import org.junit.Test;
 
@@ -126,6 +127,10 @@ public class InsertDataTest
         final List validCarts = validCriteria.list();
         assertNotNull(validCarts);
         assertEquals(1, validCarts.size());
+
+        validCriteria.setProjection(Projections.rowCount());
+        Long count = (Long) validCriteria.uniqueResult();
+        assertEquals((Long)1L, count);
 
         final Long NOT_EXIST_ACCOUNT_ID = 0L;
         final Criteria criteria = queryCartByAccountIdViaOrderItem(NOT_EXIST_ACCOUNT_ID, session);
