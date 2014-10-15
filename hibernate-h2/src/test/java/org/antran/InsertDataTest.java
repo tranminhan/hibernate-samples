@@ -130,7 +130,7 @@ public class InsertDataTest
 
         validCriteria.setProjection(Projections.rowCount());
         Long count = (Long) validCriteria.uniqueResult();
-        assertEquals((Long)1L, count);
+        assertEquals((Long) 1L, count);
 
         final Long NOT_EXIST_ACCOUNT_ID = 0L;
         final Criteria criteria = queryCartByAccountIdViaOrderItem(NOT_EXIST_ACCOUNT_ID, session);
@@ -144,10 +144,12 @@ public class InsertDataTest
     private Criteria queryCartByAccountIdViaOrderItem2(Long accountId, Session session)
     {
         final Criteria criteria = session.createCriteria(Cart.class, "cart");
-        final Criteria cartItem = criteria.createAlias("cart.items", "item");
-        final Criteria orderItemCriteria = cartItem.createAlias("item.orderItem", "orderItem");
-        final Criteria accountCriteria = cartItem.createAlias("orderItem.account", "account");
-        accountCriteria.add(Restrictions.eq("account.id", accountId));
+        final Criteria criteria1 = criteria
+                .createAlias("cart.items", "item");
+
+        criteria1.createAlias("item.orderItem", "orderItem")
+                .createAlias("orderItem.account", "account")
+                .add(Restrictions.eq("account.id", accountId));
 
         //criteria.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
         return criteria;
@@ -161,12 +163,11 @@ public class InsertDataTest
 
         final Session session = HibernateUtil.getSessionFactory().openSession();
 
-        final Long VALID_ACCOUNT_ID = 7L;
+        final Long VALID_ACCOUNT_ID = 8L;
         final Criteria validCriteria = queryCartByAccountIdViaOrderItem2(VALID_ACCOUNT_ID, session);
-        //validCriteria.setProjection(Projections.countDistinct("cart.id"));
-        validCriteria.setProjection(Projections.rowCount());
+        validCriteria.setProjection(Projections.countDistinct("cart.id"));
         Long count = (Long) validCriteria.uniqueResult();
-        assertEquals((Long)1L, count);
+        assertEquals((Long) 1L, count);
 
         session.close();
     }
