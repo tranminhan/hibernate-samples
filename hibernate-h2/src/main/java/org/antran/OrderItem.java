@@ -1,6 +1,7 @@
 package org.antran;
 
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 
@@ -11,6 +12,7 @@ import javax.persistence.ManyToOne;
 public class OrderItem
 {
     @Id
+    @GeneratedValue
     Long id;
     String name;
 
@@ -27,6 +29,12 @@ public class OrderItem
     public OrderItem(Long id, String name, Account account)
     {
         this.id = id;
+        this.name = name;
+        this.account = account;
+    }
+
+    public OrderItem(String name, Account account)
+    {
         this.name = name;
         this.account = account;
     }
