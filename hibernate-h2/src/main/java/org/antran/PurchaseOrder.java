@@ -1,5 +1,6 @@
 package org.antran;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
@@ -15,7 +16,7 @@ public class PurchaseOrder
     @Id
     Long id;
 
-    @OneToMany(mappedBy = "order")
+    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
     List<OrderItem> items = new ArrayList<OrderItem>();
 
     public PurchaseOrder()

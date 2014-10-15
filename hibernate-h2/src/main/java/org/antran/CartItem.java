@@ -1,9 +1,6 @@
 package org.antran;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.ManyToOne;
+import javax.persistence.*;
 
 /**
  * Created by atran on 10/14/14.
@@ -21,6 +18,9 @@ public class CartItem
 
     @ManyToOne
     Cart cart;
+
+    @OneToOne
+    OrderItem orderItem;
 
     public CartItem()
     {
@@ -77,5 +77,15 @@ public class CartItem
     public void setCart(Cart cart)
     {
         this.cart = cart;
+    }
+
+    public OrderItem getOrderItem()
+    {
+        return orderItem;
+    }
+
+    public void setOrderItem(OrderItem orderItem)
+    {
+        this.orderItem = orderItem;
     }
 }

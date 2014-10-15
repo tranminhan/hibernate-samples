@@ -35,16 +35,7 @@ public class InsertDataTest
 
         session.save(account1);
         session.save(order1);
-        for (OrderItem item : order1.getItems())
-        {
-            session.save(item);
-        }
-
         session.save(cart1);
-        for (CartItem item : cart1.getItems())
-        {
-            session.save(item);
-        }
 
         session.getTransaction().commit();
         session.close();
